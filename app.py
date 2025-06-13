@@ -41,10 +41,10 @@ class SearchResult(BaseModel):
     sources: List[SourceLink]
 
 # Initialize FastAPI application
-server = FastAPI(title="Knowledge Search API", description="API for searching the knowledge repository")
+app = FastAPI(title="Knowledge Search API", description="API for searching the knowledge repository")
 
 # Add CORS middleware
-server.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -541,7 +541,7 @@ def extract_response_content(output):
         }
 
 # API endpoints
-@server.post("/search")
+@app.post("/search")
 async def search_knowledge_repository(request: SearchQuery):
     try:
         log_handler.info(f"Received search: query='{request.query_text[:50]}...', image={request.image_data is not None}")
@@ -618,7 +618,7 @@ async def search_knowledge_repository(request: SearchQuery):
         )
 
 # System status endpoint
-@server.get("/status")
+@app.get("/status")
 async def system_status():
     try:
         connection = sqlite3.connect(DATABASE_FILE)
@@ -655,4 +655,4 @@ async def system_status():
         )
 
 if __name__ == "__main__":
-    uvicorn.run("main:server", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
