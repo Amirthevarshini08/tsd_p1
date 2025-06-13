@@ -544,7 +544,7 @@ def extract_response_content(output):
 @app.post("/search")
 async def search_knowledge_repository(request: SearchQuery):
     try:
-        log_handler.info(f"Received search: query='{request.query_text[:50]}...', image={request.image_data is not None}")
+        log_handler.info(f"Received search: query='{request.question[:50]}...', image={request.image is not None}")
         
         if not SECRET_KEY:
             error_msg = "SECRET_KEY environment variable missing"
@@ -559,8 +559,8 @@ async def search_knowledge_repository(request: SearchQuery):
         try:
             log_handler.info("Generating query vector")
             search_vector = await handle_multimodal_input(
-                request.query_text,
-                request.image_data
+                request.question,
+                request.image
             )
             
             log_handler.info("Locating matching content")
