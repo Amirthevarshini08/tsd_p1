@@ -577,7 +577,7 @@ async def search_knowledge_repository(request: SearchQuery):
             enhanced_matches = await enhance_with_context(connection, relevant_matches)
             
             log_handler.info("Creating response")
-            model_output = await create_response(request.query_text, enhanced_matches)
+            model_output = await create_response(request.question, enhanced_matches)
             
             log_handler.info("Extracting response content")
             result = extract_response_content(model_output)
